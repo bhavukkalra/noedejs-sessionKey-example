@@ -52,10 +52,19 @@ login credentials. If the user is logged in, we’ll display a logout link.
  */
 
 app.get('/',(req,res) => {
-    session=req.session;
+    console.log("Something is wrong")
+    // This never gets triggered (Some functionality is missing)
+    session=req.session; // gets sent everytime a request is made
+    // If user isn't logged in then
+    console.log("Does this contains the incoming cookie value",session )
+    // It seems like whenever the cookie gets sent
+    console.log("session.userid", session.userid)
+    // The main auth handler(In case of a backend, Fetch it comapare its validity then authenticate the user accordingly)
     if(session.userid){
         res.send("Welcome User <a href=\'/logout'>click to logout</a>");
     }else
+        console.log("But the file is being sent")
+        console.log("Bro, THis page is getting showed. HOOOOOOW?")
         res.sendFile('views/index.html',{root:__dirname})
 });
 
@@ -76,14 +85,32 @@ app.post('/user',(req,res) => {
         // From where did we got the session? Where was it defined in this scope?
 
         session=req.session;
+        console.log("Session - ", session)
         session.userid=req.body.username;
         console.log(req.session)
         res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
+        // res.send("")
     }
     else{
         res.send('Invalid username or password');
     }
 })
+
+// Session {
+//     cookie: {
+//         path: '/',
+//             _expires: 2023-08-10T20:42:58.836Z,
+//             originalMaxAge: 86399999,
+//             httpOnly: true
+//     },
+//     userid: 'user1'
+// }
+
+// THE THING THAT WILL BE STORED IN THE DB FOR checking against the cookie
+
+// s%3AZqauo4-IsXPBeoNlVwiYgB5OqEuR4maf.mCrVHSfp9zwwsZa6gP4yimtX5Nsj9YRV6vmuMrMvlQY
+// s%3AZqauo4-IsXPBeoNlVwiYgB5OqEuR4maf.mCrVHSfp9zwwsZa6gP4yimtX5Nsj9YRV6vmuMrMvlQY
+
 
 
 /*
